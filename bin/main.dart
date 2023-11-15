@@ -10,15 +10,13 @@ void main(List<String> arguments) {
   print('Valor do Nó Raiz: $valorRaiz');
   ArvoreBinaria arvoreBinaria = ArvoreBinaria(raiz: NoArvore(valorRaiz));
 
-  // Sorteio de 20 números e inserção na árvore
+  // Sorteio de 19 números e inserção na árvore
   for (int i = 0; i < 19; i++) {
     int randomNumber = Random().nextInt(101);
     print('Nó inserido: $randomNumber');
     arvoreBinaria.inserirNo(arvoreBinaria.raiz, randomNumber);
     valoresInseridos.add(randomNumber);
   }
-
-  // arvoreBinaria.retira(arvoreBinaria.raiz, 15);
 
   print("\n\nEM ORDEM:\n");
   arvoreBinaria.imprimirEmOrdem(arvoreBinaria.raiz);
@@ -31,7 +29,7 @@ void main(List<String> arguments) {
 
   print('------------------- REMOÇÃO -------------------');
 
-  // Sorteio de 20 números e remoção na árvore
+  // Remover 5 nós da árvore
   for (int i = 0; i < 5; i++) {
     int? randomNumber;
     while (!valoresInseridos.contains(randomNumber)) {
