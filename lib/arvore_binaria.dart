@@ -1,7 +1,7 @@
 import 'no_arvore.dart';
 
 class ArvoreBinaria {
-  final NoArvore raiz;
+  NoArvore raiz;
 
   ArvoreBinaria({required this.raiz});
 
@@ -114,5 +114,87 @@ class ArvoreBinaria {
         nivel.add(tempNode.direita!);
       }
     }
+  }
+
+// Algoritmo DSW
+  void balanceamentoDSW() {
+    // Passo 1: Transformar a árvore em uma lista
+    List<NoArvore> nos = [];
+    inOrdemToList(raiz, nos);
+
+    // Passo 2: Realizar rotações á direita (simples) para equilibrar a lista
+    int qtdNos = nos.length;
+    int metadeNos = (qtdNos + 1) ~/ 2;
+
+    for (int i = 0; i < metadeNos; i++) {
+      raiz = rotacionarDireita(raiz);
+    }
+
+    // Passo 3: Reconstruir a árvore a partir da lista balanceada
+    reconstruirArvoreBalanceada(qtdNos);
+  }
+
+  // Método auxiliar para adicionar os nós da arvore de forma ordenada à lista de nós
+  void inOrdemToList(NoArvore? noArvore, List<NoArvore> nos) {
+    if (noArvore != null) {
+      inOrdemToList(noArvore.esquerda, nos);
+      nos.add(noArvore);
+      inOrdemToList(noArvore.direita, nos);
+    }
+  }
+
+  // Rotação à direita
+  NoArvore rotacionarDireita(NoArvore? raiz) {
+    if (raiz == null || raiz.esquerda == null) {
+      return raiz!;
+    }
+
+    NoArvore novaRaiz = raiz.esquerda!;
+    raiz.esquerda = novaRaiz.direita;
+    novaRaiz.direita = raiz;
+
+    return novaRaiz;
+  }
+
+  // Método para reconstruir a árvore a partir da lista balanceada
+  void reconstruirArvoreBalanceada(int qtdNos) {
+    int mediaAux = qtdNos;
+
+    while (mediaAux > 1) {
+      mediaAux ~/= 2;
+      raiz = rotacionarEsquerda(raiz, mediaAux);
+    }
+  }
+
+  // Rotação à esquerda
+  NoArvore rotacionarEsquerda(NoArvore? raiz, int mediaAux) {
+    NoArvore? tempRaiz = raiz;
+    NoArvore? prev;
+
+    for (int i = 0; i < mediaAux && tempRaiz != null; i++) {
+      prev = tempRaiz;
+      tempRaiz = tempRaiz.direita;
+    }
+
+    if (tempRaiz != null) {
+      prev!.direita = tempRaiz.esquerda;
+      tempRaiz.esquerda = prev;
+    } else {
+      return prev!;
+    }
+
+    return tempRaiz;
+  }
+
+  int alturaArvore(NoArvore? noArvore) {
+    if (noArvore == null) {
+      return 0;
+    }
+
+    int alturaEsquerda = alturaArvore(noArvore.esquerda);
+    int alturaDireita = alturaArvore(noArvore.direita);
+
+    return 1 +
+        (alturaEsquerda > alturaDireita ? alturaEsquerda : alturaDireita);
   }
 }
